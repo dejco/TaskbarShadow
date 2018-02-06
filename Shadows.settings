@@ -20,8 +20,8 @@
     <Setting Name="ShadowOpacity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">255</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="MinimizeOnStart" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

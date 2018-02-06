@@ -42,24 +42,39 @@ namespace TaskbarShadow
             FormBorderStyle = FormBorderStyle.None;
         }
 
-        IntPtr window = IntPtr.Zero;
+        public IntPtr _taskbar = IntPtr.Zero;
+        public Win32.RECT _rect = new Win32.RECT();
+        public Bitmap ShadowBitmap;
+        public bool IsVisible = true;
+        public void ToggleShadow()
+        {
+            if (IsVisible == true)
+            {
+                SetBitmap(ShadowBitmap, 0);
+                IsVisible = false;
+            }
+            else if (IsVisible == false)
+            {
+                SetBitmap(ShadowBitmap, (byte)Shadows.Default.ShadowOpacity);
+                IsVisible = true;
+            }
+        }
 
         public void SetShadow(IntPtr wnd)
         {
             this.ShowInTaskbar = false;
-            window = wnd;
+            _taskbar = wnd;
             UpdateShadow();
         }
         public void UpdateShadow()
-        { 
-            Win32.RECT r = new Win32.RECT();
-            Win32.GetWindowRect(window, out r);
-            int[] loc = GetShadowLocation(r, Shadows.Default.Size);
+        {            
+            Win32.GetWindowRect(_taskbar, out _rect);
+            int[] loc = GetShadowLocation(_rect, Shadows.Default.Size);
 
             if (loc.Length == 5)
             {
-                Bitmap b = new Bitmap(loc[2], loc[3]);
-                using (Graphics g = Graphics.FromImage(b))
+                ShadowBitmap = new Bitmap(loc[2], loc[3]);
+                using (Graphics g = Graphics.FromImage(ShadowBitmap))
                 {
                     LinearGradientBrush lb = null;
 
@@ -88,9 +103,9 @@ namespace TaskbarShadow
                         Color.FromArgb(Shadows.Default.Color2Opacity, Shadows.Default.Color2.R, Shadows.Default.Color2.G, Shadows.Default.Color2.B));
                     }
 
-                    g.FillRectangle(lb, 0, 0, b.Width, b.Height);
-                }
-                SetBitmap(b);
+                    g.FillRectangle(lb, 0, 0, ShadowBitmap.Width, ShadowBitmap.Height);
+                }                
+                SetBitmap(ShadowBitmap, (byte)Shadows.Default.ShadowOpacity);
 
                 this.Left = loc[0];
                 this.Top = loc[1];
@@ -141,7 +156,7 @@ namespace TaskbarShadow
         }
         
         /// <para>Changes the current bitmap with a custom opacity level.  Here is where all happens!</para>
-        public void SetBitmap(Bitmap bitmap)
+        public void SetBitmap(Bitmap bitmap, byte opacity)
         {
             if (bitmap.PixelFormat != PixelFormat.Format32bppArgb)
                 throw new ApplicationException("The bitmap must be 32ppp with alpha-channel.");
@@ -167,7 +182,7 @@ namespace TaskbarShadow
                 Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION();
                 blend.BlendOp = Win32.AC_SRC_OVER;
                 blend.BlendFlags = 0;
-                blend.SourceConstantAlpha = (byte)Shadows.Default.ShadowOpacity;
+                blend.SourceConstantAlpha = opacity;
                 blend.AlphaFormat = Win32.AC_SRC_ALPHA;
 
                 Win32.UpdateLayeredWindow(Handle, screenDc, ref topPos, ref size, memDc, ref pointSource, 0, ref blend, Win32.ULW_ALPHA);
@@ -184,7 +199,6 @@ namespace TaskbarShadow
                 Win32.DeleteDC(memDc);
             }
         }
-
 
         protected override CreateParams CreateParams
         {

@@ -43,16 +43,19 @@
             this.ResetBtn = new System.Windows.Forms.Button();
             this.ShadowOpacityLbl = new System.Windows.Forms.GroupBox();
             this.ShadowOpacity = new System.Windows.Forms.TrackBar();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.InvertColors = new System.Windows.Forms.Button();
             this.SwapColors = new System.Windows.Forms.Button();
             this.StartWithWindows = new System.Windows.Forms.CheckBox();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShowControllerItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToggleShadowsItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UpdateShadowsItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MinimizeOnStart = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.sizeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.color1Opacity)).BeginInit();
             this.sizelbl.SuspendLayout();
@@ -124,7 +127,7 @@
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Color 1";
-            this.toolTip1.SetToolTip(this.groupBox2, "Color away from taskbar");
+            this.toolTip.SetToolTip(this.groupBox2, "Color away from taskbar");
             // 
             // color1
             // 
@@ -135,7 +138,7 @@
             this.color1.Size = new System.Drawing.Size(40, 60);
             this.color1.TabIndex = 2;
             this.color1.TabStop = false;
-            this.toolTip1.SetToolTip(this.color1, "Click to change color");
+            this.toolTip.SetToolTip(this.color1, "Click to change color 1");
             this.color1.Click += new System.EventHandler(this.SetColor);
             // 
             // groupBox3
@@ -151,7 +154,7 @@
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Color 2";
-            this.toolTip1.SetToolTip(this.groupBox3, "Color at taskbar");
+            this.toolTip.SetToolTip(this.groupBox3, "Color at taskbar");
             // 
             // color2
             // 
@@ -162,7 +165,7 @@
             this.color2.Size = new System.Drawing.Size(40, 58);
             this.color2.TabIndex = 2;
             this.color2.TabStop = false;
-            this.toolTip1.SetToolTip(this.color2, "Click to change color");
+            this.toolTip.SetToolTip(this.color2, "Click to change color 2");
             this.color2.Click += new System.EventHandler(this.SetColor);
             // 
             // color2Opacity
@@ -205,13 +208,13 @@
             this.ShadowOpacityLbl.Size = new System.Drawing.Size(283, 79);
             this.ShadowOpacityLbl.TabIndex = 9;
             this.ShadowOpacityLbl.TabStop = false;
-            this.ShadowOpacityLbl.Text = "Opacity";
+            this.ShadowOpacityLbl.Text = "Shadow opacity";
             // 
             // ShadowOpacity
             // 
             this.ShadowOpacity.Location = new System.Drawing.Point(6, 19);
             this.ShadowOpacity.Maximum = 255;
-            this.ShadowOpacity.Minimum = 4;
+            this.ShadowOpacity.Minimum = 1;
             this.ShadowOpacity.Name = "ShadowOpacity";
             this.ShadowOpacity.Size = new System.Drawing.Size(271, 45);
             this.ShadowOpacity.TabIndex = 1;
@@ -226,7 +229,7 @@
             this.InvertColors.Name = "InvertColors";
             this.InvertColors.Size = new System.Drawing.Size(30, 30);
             this.InvertColors.TabIndex = 11;
-            this.toolTip1.SetToolTip(this.InvertColors, "Invert color\r\nLeft click for Color 1 \r\nRight click for Color 2\r\nMiddle click for " +
+            this.toolTip.SetToolTip(this.InvertColors, "Invert color\r\nLeft click for Color 1 \r\nRight click for Color 2\r\nMiddle click for " +
         "both");
             this.InvertColors.UseVisualStyleBackColor = true;
             this.InvertColors.MouseUp += new System.Windows.Forms.MouseEventHandler(this.InvertColors_MouseUp);
@@ -239,16 +242,14 @@
             this.SwapColors.Name = "SwapColors";
             this.SwapColors.Size = new System.Drawing.Size(30, 30);
             this.SwapColors.TabIndex = 10;
-            this.toolTip1.SetToolTip(this.SwapColors, "Swap colors");
+            this.toolTip.SetToolTip(this.SwapColors, "Swap colors");
             this.SwapColors.UseVisualStyleBackColor = true;
             this.SwapColors.Click += new System.EventHandler(this.SwapColors_Click);
             // 
             // StartWithWindows
             // 
-            this.StartWithWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StartWithWindows.AutoSize = true;
-            this.StartWithWindows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.StartWithWindows.Location = new System.Drawing.Point(274, 283);
+            this.StartWithWindows.Location = new System.Drawing.Point(12, 285);
             this.StartWithWindows.Name = "StartWithWindows";
             this.StartWithWindows.Size = new System.Drawing.Size(117, 17);
             this.StartWithWindows.TabIndex = 12;
@@ -256,53 +257,84 @@
             this.StartWithWindows.UseVisualStyleBackColor = true;
             this.StartWithWindows.Click += new System.EventHandler(this.StartWithWindows_Click);
             // 
-            // notifyIcon1
+            // notifyIcon
             // 
-            this.notifyIcon1.ContextMenuStrip = this.notifyMenu;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Taskbar Shadow";
-            this.notifyIcon1.Visible = true;
+            this.notifyIcon.ContextMenuStrip = this.notifyMenu;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Taskbar Shadow";
+            this.notifyIcon.Visible = true;
             // 
             // notifyMenu
             // 
             this.notifyMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showToolStripMenuItem,
-            this.aboutToolStripMenuItem,
+            this.ShowControllerItem,
+            this.ToggleShadowsItem,
+            this.UpdateShadowsItem,
             this.toolStripSeparator1,
+            this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.notifyMenu.Name = "contextMenuStrip1";
-            this.notifyMenu.Size = new System.Drawing.Size(153, 98);
+            this.notifyMenu.Size = new System.Drawing.Size(162, 120);
             // 
-            // showToolStripMenuItem
+            // ShowControllerItem
             // 
-            this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.showToolStripMenuItem.Text = "Show";
+            this.ShowControllerItem.Name = "ShowControllerItem";
+            this.ShowControllerItem.Size = new System.Drawing.Size(161, 22);
+            this.ShowControllerItem.Text = "Hide controller";
+            this.ShowControllerItem.Click += new System.EventHandler(this.ShowToolStripMenuItem_Click);
             // 
-            // aboutToolStripMenuItem
+            // ToggleShadowsItem
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.ToggleShadowsItem.Name = "ToggleShadowsItem";
+            this.ToggleShadowsItem.Size = new System.Drawing.Size(161, 22);
+            this.ToggleShadowsItem.Text = "Toggle shadows";
+            this.ToggleShadowsItem.ToolTipText = "Toggle shadows on all displays";
+            this.ToggleShadowsItem.Click += new System.EventHandler(this.ToggleShadowsItem_Click);
+            // 
+            // UpdateShadowsItem
+            // 
+            this.UpdateShadowsItem.Name = "UpdateShadowsItem";
+            this.UpdateShadowsItem.Size = new System.Drawing.Size(161, 22);
+            this.UpdateShadowsItem.Text = "Update shadows";
+            this.UpdateShadowsItem.ToolTipText = "Update shadows on all displays";
+            this.UpdateShadowsItem.Click += new System.EventHandler(this.UpdateShadowsItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            // 
+            // MinimizeOnStart
+            // 
+            this.MinimizeOnStart.AutoSize = true;
+            this.MinimizeOnStart.Location = new System.Drawing.Point(135, 285);
+            this.MinimizeOnStart.Name = "MinimizeOnStart";
+            this.MinimizeOnStart.Size = new System.Drawing.Size(150, 17);
+            this.MinimizeOnStart.TabIndex = 13;
+            this.MinimizeOnStart.Text = "Minimize controller on start";
+            this.MinimizeOnStart.UseVisualStyleBackColor = true;
+            this.MinimizeOnStart.Click += new System.EventHandler(this.MinimizeOnStart_Click);
             // 
             // TaskbarShadowController
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 314);
+            this.Controls.Add(this.MinimizeOnStart);
             this.Controls.Add(this.StartWithWindows);
             this.Controls.Add(this.InvertColors);
             this.Controls.Add(this.SwapColors);
@@ -314,7 +346,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 353);
             this.Name = "TaskbarShadowController";
-            this.Text = "TaskbarShadowController";
+            this.Opacity = 0.99D;
+            this.Text = "Taskbar Shadow Controller";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TaskbarShadowController_FormClosing);
             this.Load += new System.EventHandler(this.TaskbarShadowController_Load);
             ((System.ComponentModel.ISupportInitialize)(this.sizeBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.color1Opacity)).EndInit();
@@ -350,15 +384,18 @@
         private System.Windows.Forms.Button ResetBtn;
         private System.Windows.Forms.GroupBox ShadowOpacityLbl;
         private System.Windows.Forms.TrackBar ShadowOpacity;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button SwapColors;
         private System.Windows.Forms.Button InvertColors;
         private System.Windows.Forms.CheckBox StartWithWindows;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip notifyMenu;
-        private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ShowControllerItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.CheckBox MinimizeOnStart;
+        private System.Windows.Forms.ToolStripMenuItem UpdateShadowsItem;
+        private System.Windows.Forms.ToolStripMenuItem ToggleShadowsItem;
     }
 }

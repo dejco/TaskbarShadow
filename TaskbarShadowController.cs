@@ -47,11 +47,46 @@ namespace TaskbarShadow
                     ShadowWindows.Add(ppa);
                     ppa.Show();
                     ppa.SetShadow(wnd);
+
+                    ToolStripMenuItem ShadowToggleItem = new ToolStripMenuItem
+                    {
+                        Tag = ppa,
+                        Text = "Shadow " + ShadowWindows.Count.ToString(),
+                        Checked = ppa.IsVisible                        
+                    };
+                    ShadowToggleItem.Click += ShadowToggleItem_Click;
+                    ShadowToggleItem.ToolTipText = "Toggle shadow " + ShadowWindows.Count.ToString();
+                    ToggleShadowsItem.DropDownItems.Add(ShadowToggleItem);                    
                 }
+            }
+
+            if (Shadows.Default.MinimizeOnStart == true)
+            {
+                this.Opacity = 0;
+                this.ShowInTaskbar = false;
+                ShowControllerItem.Text = "Show controller";
+            }
+        }
+        
+        private void ShadowToggleItem_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem)
+            {
+                try
+                {
+                    ToggleShadow((ToolStripMenuItem)sender);
+                }
+                catch { }
             }
         }
 
-       
+        private void ToggleShadow(ToolStripMenuItem item)
+        {
+            PerPixelAlphaForm ppa = (PerPixelAlphaForm)item.Tag;
+            ppa.ToggleShadow();
+            item.Checked = ppa.IsVisible;
+        }
+        
         private void UpdateShadows()
         {
             if (ShadowWindows.Count > 0)
@@ -78,6 +113,7 @@ namespace TaskbarShadow
             color2Opacity.Value = Shadows.Default.Color2Opacity;
             sizeBar.Value = Shadows.Default.Size;
             ShadowOpacity.Value = Shadows.Default.ShadowOpacity;
+            MinimizeOnStart.Checked = Shadows.Default.MinimizeOnStart;            
         }
 
         private void UpdateLabels()
@@ -90,13 +126,6 @@ namespace TaskbarShadow
 
         private void ResetShadows()
         {
-            //Shadows.Default.Color1 = Color.Black;
-            //Shadows.Default.Color2 = Color.Black;
-            //Shadows.Default.Color1Opacity = 0;
-            //Shadows.Default.Color2Opacity = 135;
-            //Shadows.Default.Size = 14;
-            //Shadows.Default.ShadowOpacity = 255;
-            //Shadows.Default.Save();
             Shadows.Default.Reset();
             LoadSettings();
             UpdateLabels();
@@ -122,7 +151,6 @@ namespace TaskbarShadow
                 UpdateShadows();
             }
         }
-
 
         private void SetValues(object sender, EventArgs e)
         {
@@ -165,8 +193,7 @@ namespace TaskbarShadow
 
         private void StartWithWindows_Click(object sender, EventArgs e)
         {
-            bool value = this.StartWithWindows.Checked;
-            if (value)
+            if (this.StartWithWindows.Checked)
             {
                 RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 bool flag = !this.IsStartupItem();
@@ -193,15 +220,67 @@ namespace TaskbarShadow
             return !flag;
         }
 
+        /// <summary>
+        /// Get or set app as startup item
+        /// </summary>
+        /// <param name="enable">use null to check only</param>
+        /// <returns></returns>
+        private bool IsStartupitem(bool? enable)
+        {
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            return false;
+        }
+
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutTBS aboutTBS = new AboutTBS();
             aboutTBS.ShowDialog();
+        }
+
+        private void MinimizeOnStart_Click(object sender, EventArgs e)
+        {
+            Shadows.Default.MinimizeOnStart = MinimizeOnStart.Checked;
+            Shadows.Default.Save();
+        }
+
+        private void ShowToolStripMenuItem_Click(object sender, EventArgs e)
+        {            
+            if (this.Opacity >=0.5D)
+            {
+                this.Opacity = 0;
+                this.ShowInTaskbar = false;
+                ShowControllerItem.Text = "Show controller";
+            }
+            else if(this.Opacity <0.5D)
+            {
+                this.Opacity = 1;
+                this.ShowInTaskbar = true;
+                ShowControllerItem.Text = "Hide controller";
+            }
+        }        
+
+        private void ToggleShadowsItem_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripMenuItem item in ToggleShadowsItem.DropDownItems)
+            {
+                ToggleShadow(item);
+            }
+        }
+
+        private void UpdateShadowsItem_Click(object sender, EventArgs e)
+        {
+            UpdateShadows();
+        }
+
+        private void TaskbarShadowController_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            notifyIcon.Visible = false;
         }
     }
 }
